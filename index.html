@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -53,7 +14,7 @@
             color: #333;
         }
         .container {
-            max-width: 700px;
+            max-width: 760px;
             margin: 30px auto;
             padding: 0 20px;
         }
@@ -68,7 +29,7 @@
         h2 {
             color: #2b6cb0;
             font-size: 1.5em;
-            margin: 20px 0 10px;
+            margin: 24px 0 10px;
         }
         h3 {
             color: #4a5568;
@@ -78,6 +39,12 @@
         p {
             margin: 5px 0;
             font-size: 1em;
+        }
+        .paper {
+            margin-bottom: 16px;
+        }
+        .paper-title {
+            font-weight: bold;
         }
         .links a {
             color: #3182ce;
@@ -93,12 +60,46 @@
         <div class="header">
             <h1>Chen Linze</h1>
         </div>
+
+        <h2>Research Interests</h2>
+        <p>
+            My research focuses on trustworthy legal AI, large language model agents,
+            formal reasoning, solver-grounded legal verification, and relevance-sensitive
+            evaluation for legal reasoning systems.
+        </p>
+
         <h2>Education</h2>
         <h3>National University of Singapore (NUS)</h3>
-        <p>Graduated Student  - Master of Computing in Artificial Intelligence [2025-2027]</p>
-        <p>Undergrad Student (NGNE) - Computer Science [2024-2025]</p>
+        <p>Graduate Student - Master of Computing in Artificial Intelligence [2025-2027]</p>
+        <p>Undergraduate Student (NGNE) - Computer Science [2024-2025]</p>
+
         <h3>University of Electronic Science and Technology of China (UESTC)</h3>
-        <p>Undergrad Student - Software Engineering [2021-2025]</p>
+        <p>Undergraduate Student - Software Engineering [2021-2025]</p>
+
+        <h2>Publications</h2>
+
+        <div class="paper">
+            <p class="paper-title">
+                Which Changes Matter? Towards Trustworthy Legal AI via Relevance-Sensitive Evaluation and Solver-Grounded Reasoning
+            </p>
+            <p>Chen Linze, Cai Yufan, Hou Zhe, Dong Jin Song</p>
+            <p>
+                arXiv:2605.26530 [cs.AI],
+                <a href="https://arxiv.org/abs/2605.26530" target="_blank">paper</a>
+            </p>
+        </div>
+
+        <div class="paper">
+            <p class="paper-title">
+                Towards Trustworthy Legal AI through LLM Agents and Formal Reasoning
+            </p>
+            <p>Linze Chen, Yufan Cai, Zhe Hou, Jin Song Dong</p>
+            <p>
+                arXiv:2511.21033 [cs.AI],
+                <a href="https://arxiv.org/abs/2511.21033" target="_blank">paper</a>
+            </p>
+        </div>
+
         <h2>Contact</h2>
         <div class="links">
             <a href="mailto:e1344652@u.nus.edu">Email</a>
